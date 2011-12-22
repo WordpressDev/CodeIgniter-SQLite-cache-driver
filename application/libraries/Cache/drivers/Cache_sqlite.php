@@ -30,10 +30,9 @@ if (!defined('BASEPATH'))
 class CI_Cache_sqlite extends CI_Driver {
     
     var $cache_path;
-    var $cache_file = "cache.sqlite"; // filename
-    var $auto_flush = false; // flush cache on save
+    var $cache_file;
+    var $auto_flush;
     
-
     // the SQLite object
     protected $sqlite;
     
@@ -43,8 +42,17 @@ class CI_Cache_sqlite extends CI_Driver {
     public function __construct() {
         $CI = & get_instance();
         
+        // get cache_path from config if available
         $path = $CI->config->item('cache_path');
         $this->cache_path = ($path == '') ? APPPATH . 'cache/' : $path;
+        
+        // get cache_file name from config if available
+        $cache_file = $CI->config->item('cache_file');
+        $this->cache_file = ($cache_file == '') ? 'cache.sqlite' : $cache_file;
+        
+        // get auto_flush name from config if available
+        $auto_flush = $CI->config->item('cache_autoflush');
+        $this->auto_flush = ($auto_flush == '') ? FALSE : $auto_flush;
         
         // initialize the database
         try {
