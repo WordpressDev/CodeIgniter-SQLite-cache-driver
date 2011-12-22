@@ -90,7 +90,7 @@ class CI_Cache_sqlite extends CI_Driver {
             if (!$query || !$data = $query->fetch(PDO::FETCH_ASSOC))
                 return FALSE;
             
-            // time to live elapsed
+     // time to live elapsed
             if (time() > $data['expire']) {
                 $this->delete($id);
                 return FALSE;
@@ -223,7 +223,7 @@ class CI_Cache_sqlite extends CI_Driver {
      */
     public function get_metadata($id) {
         try {
-            $query = $this->sqlite->query("SELECT * FROM cache WHERE id = '" . $id . "'");
+            $query = $this->sqlite->query("SELECT * FROM cache WHERE id = '" . (string) $id . "'");
             
             // cache miss
             if (!$query || !$data = $query->fetch(PDO::FETCH_ASSOC))
