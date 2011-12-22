@@ -30,7 +30,7 @@ if (!defined('BASEPATH'))
 class CI_Cache_sqlite extends CI_Driver {
     
     var $cache_path;
-    var $sqlite_file = "cache.sqlite"; // filename
+    var $cache_file = "cache.sqlite"; // filename
     var $auto_flush = false; // flush cache on save
     
 
@@ -42,14 +42,13 @@ class CI_Cache_sqlite extends CI_Driver {
      */
     public function __construct() {
         $CI = & get_instance();
-        $CI->load->helper('file');
         
         $path = $CI->config->item('cache_path');
         $this->cache_path = ($path == '') ? APPPATH . 'cache/' : $path;
         
         // initialize the database
         try {
-            $this->sqlite = new PDO('sqlite:' . $this->cache_path . $this->sqlite_file);
+            $this->sqlite = new PDO('sqlite:' . $this->cache_path . $this->cache_file);
             $this->sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // create cache database
@@ -182,23 +181,22 @@ class CI_Cache_sqlite extends CI_Driver {
     /**
      * Cache Info
      *
-     * @param 	string	user/filehits
      * @return 	mixed 	FALSE
      */
-    public function cache_info($type = NULL) {
+    public function cache_info() {
         try {
             $info = array();
             
             // get number of items in cache
             $query = $this->sqlite->query("SELECT count(1) FROM cache");
-            if ($result = $query->fetch())
+            if ($query && $result = $query->fetch())
                 $info["items"] = $result[0];
             else
                 $info["items"] = 0;
             
-            $info["size"] = filesize($this->cache_path . $this->sqlite_file);
+            $info["size"] = filesize($this->cache_path . $this->cache_file);
             $info["path"] = $this->cache_path;
-            $info["filename"] = $this->sqlite_file;
+            $info["filename"] = $this->cache_file;
             
             return $info;
         } catch ( PDOException $e ) {
