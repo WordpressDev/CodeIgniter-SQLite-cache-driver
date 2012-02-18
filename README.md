@@ -1,4 +1,4 @@
-Codeigniter SQLite Cache Driver
+CodeIgniter SQLite Cache Driver
 =========================================
 
 SQLite is a single disk file relational database system that may be available on your webserver. This driver saves the cache data as a key value pair with an expire timestamp.
